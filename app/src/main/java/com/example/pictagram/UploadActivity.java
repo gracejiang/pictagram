@@ -1,5 +1,6 @@
 package com.example.pictagram;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.pictagram.models.Post;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -29,6 +32,11 @@ import com.parse.SaveCallback;
 import java.io.File;
 import java.util.List;
 
+
+/* TODO
+** shrink resolution & add rotations https://guides.codepath.org/android/Accessing-the-Camera-and-Stored-Media
+*/
+
 public class UploadActivity extends AppCompatActivity {
 
     public static final String TAG = "UploadActivity";
@@ -38,6 +46,8 @@ public class UploadActivity extends AppCompatActivity {
     Button btnTakePicture;
     ImageView ivPostImage;
     Button btnSubmit;
+    BottomNavigationView bottomNavigationView;
+
     private File photoFile;
     private String photoFileName = "pic.jpg";
 
@@ -50,6 +60,7 @@ public class UploadActivity extends AppCompatActivity {
         btnTakePicture = findViewById(R.id.upload_take_pic_btn);
         ivPostImage = findViewById(R.id.upload_image_preview);
         btnSubmit = findViewById(R.id.upload_submit_btn);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         // launch camera activity
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +86,27 @@ public class UploadActivity extends AppCompatActivity {
 
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(description, currentUser, photoFile);
+            }
+        });
+
+
+        // bottom navigation view
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_home:
+                        makeToast("home");
+                        break;
+                    case R.id.menu_create:
+                        makeToast("create");
+                        break;
+                    case R.id.menu_profile:
+                        makeToast("profile");
+                        break;
+                    default:
+                }
+                return true;
             }
         });
 
