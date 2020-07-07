@@ -1,66 +1,71 @@
-package com.example.pictagram;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
+package com.example.pictagram.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.pictagram.R;
 import com.example.pictagram.models.Post;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
-import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 
 /* TODO
-** shrink resolution & add rotations https://guides.codepath.org/android/Accessing-the-Camera-and-Stored-Media
-*/
+ ** shrink resolution & add rotations https://guides.codepath.org/android/Accessing-the-Camera-and-Stored-Media
+ */
 
-public class UploadActivity extends AppCompatActivity {
+public class CreateFragment extends Fragment {
 
-    public static final String TAG = "UploadActivity";
+    public static final String TAG = "CreateFragment";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 0;
 
     EditText etDescription;
     Button btnTakePicture;
     ImageView ivPostImage;
     Button btnSubmit;
-    BottomNavigationView bottomNavigationView;
 
     private File photoFile;
     private String photoFileName = "pic.jpg";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload);
+    public CreateFragment() {
+        // Required empty public constructor
+    }
 
-        etDescription = findViewById(R.id.upload_description);
-        btnTakePicture = findViewById(R.id.upload_take_pic_btn);
-        ivPostImage = findViewById(R.id.upload_image_preview);
-        btnSubmit = findViewById(R.id.upload_submit_btn);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_create, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        etDescription = view.findViewById(R.id.upload_description);
+        btnTakePicture = view.findViewById(R.id.upload_take_pic_btn);
+        ivPostImage = view.findViewById(R.id.upload_image_preview);
+        btnSubmit = view.findViewById(R.id.upload_submit_btn);
 
         // launch camera activity
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
@@ -89,27 +94,6 @@ public class UploadActivity extends AppCompatActivity {
             }
         });
 
-
-        // bottom navigation view
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_home:
-                        makeToast("home");
-                        break;
-                    case R.id.menu_create:
-                        makeToast("create");
-                        break;
-                    case R.id.menu_profile:
-                        makeToast("profile");
-                        break;
-                    default:
-                }
-                return true;
-            }
-        });
-
     }
 
     // launch camera application to take picture
@@ -118,16 +102,16 @@ public class UploadActivity extends AppCompatActivity {
         photoFile = getPhotoFileUri(photoFileName);
 
         // wrap File object into a content provider
-        Uri fileProvider = FileProvider.getUriForFile(UploadActivity.this, "com.codepath.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
@@ -142,7 +126,7 @@ public class UploadActivity extends AppCompatActivity {
     // returns the File for a photo stored on disk given the fileName
     public File getPhotoFileUri(String fileName) {
         // get safe storage directory for photos
-        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         // create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
@@ -182,33 +166,7 @@ public class UploadActivity extends AppCompatActivity {
 
 
     private void makeToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-
-
-    // EVENTUALLY MOVE THIS INTO TIMELINE ACTIVITY
-    // retrieve posts from parse database
-    private void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-
-        query.include(Post.KEY_USER);
-
-        query.findInBackground(new FindCallback<Post>() {
-            public void done(List<Post> posts, ParseException e) {
-                // on successfully retrieving posts, do operations here
-                if (e == null) {
-                    for (Post post : posts) {
-                        // uncomment line below to view posts
-                        // Log.i(TAG, "Post " + post.getDescription() + ", by " + post.getUser().getUsername());
-                    }
-
-                } else {
-                    Log.d(TAG, "Issue with retrieving posts: " + e.getMessage());
-                }
-
-            }
-        });
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
 
