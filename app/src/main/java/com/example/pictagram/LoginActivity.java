@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -26,6 +27,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (ParseUser.getCurrentUser() != null) {
+            goMainActivity();
+        }
 
         etUsername = findViewById(R.id.login_username);
         etPassword = findViewById(R.id.login_password);
@@ -64,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     private void goMainActivity() {
         Intent i = new Intent(this, TimelineActivity.class);
         startActivity(i);
+        finish();
     }
 
     private void makeToast(String message) {
