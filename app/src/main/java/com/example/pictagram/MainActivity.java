@@ -29,7 +29,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = "UploadActivity";
+    public static final String TAG = "MainActivity";
 
     BottomNavigationView bottomNavigationView;
 
@@ -69,35 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void makeToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-
-
-    // EVENTUALLY MOVE THIS INTO TIMELINE ACTIVITY
-    // retrieve posts from parse database
-    private void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-
-        query.include(Post.KEY_USER);
-
-        query.findInBackground(new FindCallback<Post>() {
-            public void done(List<Post> posts, ParseException e) {
-                // on successfully retrieving posts, do operations here
-                if (e == null) {
-                    for (Post post : posts) {
-                        // uncomment line below to view posts
-                        // Log.i(TAG, "Post " + post.getDescription() + ", by " + post.getUser().getUsername());
-                    }
-
-                } else {
-                    Log.d(TAG, "Issue with retrieving posts: " + e.getMessage());
-                }
-
-            }
-        });
-    }
 
 
 }
