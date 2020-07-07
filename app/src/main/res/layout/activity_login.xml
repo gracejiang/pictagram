@@ -37,5 +37,5 @@
         android:id="@+id/login_signup"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:text="Button" />
+        android:text="Sign Up" />
 </LinearLayout>

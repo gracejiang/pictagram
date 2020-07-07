@@ -52,13 +52,12 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
                     // report issue with login
-                    makeToast("There was an error with your login. Please try again!");
+                    makeToast("Invalid username or password.");
                     Log.e(TAG, "issue with login: ", e);
                     return;
                 }
 
                 // successful login
-                makeToast("Successfully logged in!");
                 goMainActivity();
             }
         });

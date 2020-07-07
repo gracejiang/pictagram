@@ -1,5 +1,6 @@
 package com.example.pictagram.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.pictagram.LoginActivity;
 import com.example.pictagram.PostsAdapter;
 import com.example.pictagram.R;
 import com.example.pictagram.models.Post;
@@ -25,6 +28,8 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment";
+
+    private Button btnLogout;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -40,6 +45,17 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        btnLogout = view.findViewById(R.id.profile_logout);
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logOut();
+            }
+        });
+
+
 //        rvPosts = view.findViewById(R.id.posts_rv);
 //
 //        // create adapter
@@ -52,6 +68,14 @@ public class ProfileFragment extends Fragment {
 //        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         queryPosts();
+    }
+
+    // log out functionality
+    private void logOut() {
+        ParseUser.logOut();
+        // ParseUser currentUser = ParseUser.getCurrentUser();
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
     }
 
     // retrieve posts from parse database
