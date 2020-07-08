@@ -3,6 +3,7 @@
     package="com.example.pictagram">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".functions.ParseApplication"
@@ -12,7 +13,7 @@
         android:roundIcon="@mipmap/ic_pictagram_full_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity"/>
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

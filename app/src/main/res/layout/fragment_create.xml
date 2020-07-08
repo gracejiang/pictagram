@@ -9,7 +9,7 @@
     tools:context=".fragments.CreateFragment">
 
     <EditText
-        android:id="@+id/upload_description"
+        android:id="@+id/create_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -17,20 +17,27 @@
         android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/upload_take_pic_btn"
+        android:id="@+id/create_take_pic_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Take Picture" />
 
+    <Button
+        android:id="@+id/create_upload_pic_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose from Camera Roll" />
+
     <ImageView
-        android:id="@+id/upload_image_preview"
+        android:id="@+id/create_image_preview"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         tools:src="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/upload_submit_btn"
+        android:id="@+id/create_post_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit" />
+        android:text="Post Picture" />
+
 </LinearLayout>

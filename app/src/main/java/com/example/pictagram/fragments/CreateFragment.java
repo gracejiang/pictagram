@@ -3,7 +3,9 @@ package com.example.pictagram.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -21,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.pictagram.R;
 import com.example.pictagram.models.Post;
 import com.parse.ParseException;
@@ -28,7 +31,9 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -39,15 +44,20 @@ import static android.app.Activity.RESULT_OK;
 public class CreateFragment extends Fragment {
 
     public static final String TAG = "CreateFragment";
-    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 0;
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
+    public static final int PICK_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 
     EditText etDescription;
     Button btnTakePicture;
+    Button btnUploadPicture;
     ImageView ivPostImage;
     Button btnSubmit;
 
     private File photoFile;
     private String photoFileName = "pic.jpg";
+
+    Bitmap bitmap;
+    boolean uploadedPic = false;
 
     public CreateFragment() {
         // Required empty public constructor
@@ -62,16 +72,28 @@ public class CreateFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        etDescription = view.findViewById(R.id.upload_description);
-        btnTakePicture = view.findViewById(R.id.upload_take_pic_btn);
-        ivPostImage = view.findViewById(R.id.upload_image_preview);
-        btnSubmit = view.findViewById(R.id.upload_submit_btn);
+
+        etDescription = view.findViewById(R.id.create_description);
+        btnTakePicture = view.findViewById(R.id.create_take_pic_btn);
+        btnUploadPicture = view.findViewById(R.id.create_upload_pic_btn);
+        ivPostImage = view.findViewById(R.id.create_image_preview);
+        btnSubmit = view.findViewById(R.id.create_post_btn);
 
         // launch camera activity
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                uploadedPic = false;
                 launchCamera();
+            }
+        });
+
+        // launch gallery activity
+        btnUploadPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadedPic = true;
+                launchGallery();
             }
         });
 
@@ -82,15 +104,20 @@ public class CreateFragment extends Fragment {
             public void onClick(View view) {
                 String description = etDescription.getText().toString();
                 if (description.isEmpty()) {
-                    makeToast("Post description cannot be empty.");
-                    return;
-                } else if (photoFile == null || ivPostImage.getDrawable() == null) {
-                    makeToast("There is no image!");
+                    description = " ";
+                }
+
+                if (ivPostImage.getDrawable() == null) {
+                    makeToast("Please select an image to post!");
                     return;
                 }
 
                 ParseUser currentUser = ParseUser.getCurrentUser();
-                savePost(description, currentUser, photoFile);
+                if (uploadedPic) {
+                    savePost(description, currentUser, bitmap);
+                } else {
+                    savePost(description, currentUser, photoFile);
+                }
             }
         });
 
@@ -110,17 +137,67 @@ public class CreateFragment extends Fragment {
         }
     }
 
+    // launch gallery application to upload picture
+    private void launchGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+        // camera roll
+        if (requestCode == PICK_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    Uri uri = data.getData();
+                    bitmap = loadFromUri(uri);
+                    ivPostImage.setImageBitmap(bitmap);
+                } catch (NullPointerException e) {
+                    Log.e(TAG, "null pointer exception when uploading pic " + e);
+                    makeToast("Null pointer exception when uploading pic.");
+                }
+            } else { // result failed
+                makeToast("Picture wasn't uploaded.");
+            }
+            Log.i(TAG, "uploaded picture");
+        }
+
+        // take camera
+        else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 ivPostImage.setImageBitmap(takenImage);
             } else { // result failed
                 makeToast("Picture wasn't taken.");
             }
+            Log.i(TAG, "taken picture");
         }
+    }
+
+    // load image from Uri
+    public Bitmap loadFromUri(Uri photoUri) {
+        Bitmap image = null;
+        try {
+            // check version of Android on device
+            if(Build.VERSION.SDK_INT > 27){
+                // on newer versions of Android, use the new decodeBitmap method
+                ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
+                image = ImageDecoder.decodeBitmap(source);
+            } else {
+                // support older versions of Android by using getBitmap
+                image = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
     // returns the File for a photo stored on disk given the fileName
@@ -139,11 +216,50 @@ public class CreateFragment extends Fragment {
     }
 
 
+    // for uploading pics
+    private void savePost(String description, ParseUser currentUser, Bitmap bitmap) {
+        Post post = new Post();
+        post.setDescription(description);
+
+        // compresses image to lower quality
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+        // bitmap --> rbg byte[]
+        byte[] image = stream.toByteArray();
+
+        // reads in byte[] as file
+        post.setImage(new ParseFile(image));
+        post.setUser(currentUser);
+
+        // save post object to parse database
+        post.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while posting your picture", e);
+                    makeToast("Error while posting your picture.");
+                    return;
+                }
+
+                makeToast("Your picture was posted!");
+                etDescription.setText("");
+                ivPostImage.setImageResource(0);
+            }
+        });
+    }
+
+
     // saves post to database
     private void savePost(String description, ParseUser currentUser, File photoFile) {
         // create post object & set its attributes
         Post post = new Post();
         post.setDescription(description);
+//        Glide.with(getContext())
+//                .load(new File(photoFile.toURI())) // Uri of the picture
+//                //.transform(new CircleTransform(..))
+//                .into(ivPostImage);
+
         post.setImage(new ParseFile(photoFile));
         post.setUser(currentUser);
 
@@ -152,12 +268,12 @@ public class CreateFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Error while saving", e);
-                    makeToast("Error while saving your post.");
+                    Log.e(TAG, "Error while posting your picture", e);
+                    makeToast("Error while posting your picture.");
                     return;
                 }
 
-                makeToast("Your picture was uploaded!");
+                makeToast("Your picture was posted!");
                 etDescription.setText("");
                 ivPostImage.setImageResource(0);
             }

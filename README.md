@@ -27,7 +27,7 @@ The following **stretch** features are implemented:
 - [ ] After the user submits a new post, show an indeterminate progress bar while the post is being uploaded to Parse
 - User Profiles:
   - [ ] Allow the logged in user to add a profile photo
-  - [ ] Display the profile photo with each post
+  - [X] Display the profile photo with each post
   - [ ] Tapping on a post's username or profile photo goes to that user's profile page
   - [ ] User Profile shows posts in a grid view
 - [ ] User can comment on a post and see all comments for each post in the post details screen.
@@ -35,6 +35,7 @@ The following **stretch** features are implemented:
 
 The following **additional** features are implemented:
 
+- [X] User can upload and post images from their camera roll
 - [X] Integrated with Material Design library for smoother user experience
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
@@ -54,7 +55,7 @@ Here's a walkthrough of implemented user stories:
 List an 3rd party libraries, icons, graphics, or other assets you used in your app.
 
 - [Android Async Http Client](http://loopj.com/android-async-http/) - networking library
-- [Material Design](https://material.io/design) - smoother ui experience
+- [Material Design](https://material.io/design) - smoother ui experience library
 
 ## Notes
 
