@@ -5,9 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".fragments.PostsFragment">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/posts_swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/posts_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="8dp" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

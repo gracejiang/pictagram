@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,12 +28,13 @@ public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
 
+    SwipeRefreshLayout swipeContainer;
+
     RecyclerView rvPosts;
     PostsAdapter postsAdapter;
 
     // data source
     private List<Post> allPosts = new ArrayList<>();
-
 
     public PostsFragment() {
         // Required empty public constructor
@@ -49,13 +51,26 @@ public class PostsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rvPosts = view.findViewById(R.id.posts_rv);
 
-        // create adapter
+        // swipe to refresh
+        swipeContainer = view.findViewById(R.id.posts_swipe_container);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "refreshing the page!");
+                queryPosts();
+            }
+        });
+
+        // recycler view adapter
+        // (1) create adapter
         postsAdapter = new PostsAdapter(getContext(), allPosts);
-
-        // set adapter on recycler view
+        // (2) set adapter on recycler view
         rvPosts.setAdapter(postsAdapter);
-
-        // set layout manager on recycler view
+        // (3) set layout manager on recycler view
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         queryPosts();
@@ -63,6 +78,7 @@ public class PostsFragment extends Fragment {
 
     // retrieve posts from parse database
     private void queryPosts() {
+        allPosts.clear();
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 
         query.include(Post.KEY_USER);
@@ -75,7 +91,7 @@ public class PostsFragment extends Fragment {
                     for (Post post : posts) {
                         // uncomment line below to view posts
                     }
-
+                    swipeContainer.setRefreshing(false);
                 } else {
                     Log.e(TAG, "Issue with retrieving posts: " + e.getMessage());
                 }
@@ -85,6 +101,8 @@ public class PostsFragment extends Fragment {
             }
         });
     }
+
+
 
 
 }
