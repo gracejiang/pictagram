@@ -76,6 +76,7 @@ public class ProfileFragment extends Fragment {
         // ParseUser currentUser = ParseUser.getCurrentUser();
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
+        getActivity().finish();
     }
 
     // retrieve posts from parse database

@@ -2,12 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    android:paddingBottom="10dp"
+    android:divider="@drawable/empty_divider"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:showDividers="middle"
     tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="cursive"
+        android:text="Pictagram"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/login_username"
@@ -15,8 +28,7 @@
         android:layout_height="55dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
-        android:hint="username"
-        />
+        android:hint="username" />
 
     <EditText
         android:id="@+id/login_password"
@@ -31,11 +43,20 @@
         android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:background="@color/green"
+        android:textColor="#FFFFFF"
+        android:bottomRightRadius="10dp"
+        android:bottomLeftRadius="10dp"
+        android:topLeftRadius="10dp"
+        android:topRightRadius="10dp"
         android:text="Login" />
 
     <Button
         android:id="@+id/login_signup"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:text="Sign Up" />
+        android:background="@color/blue"
+        android:text="Sign Up"
+        android:textColor="#FFFFFF" />
+
 </LinearLayout>
