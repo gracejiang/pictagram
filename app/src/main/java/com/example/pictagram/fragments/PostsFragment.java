@@ -74,11 +74,10 @@ public class PostsFragment extends Fragment {
                 if (e == null) {
                     for (Post post : posts) {
                         // uncomment line below to view posts
-                        Log.i(TAG, "Post " + post.getDescription() + ", by " + post.getUser().getUsername());
                     }
 
                 } else {
-                    Log.d(TAG, "Issue with retrieving posts: " + e.getMessage());
+                    Log.e(TAG, "Issue with retrieving posts: " + e.getMessage());
                 }
 
                 allPosts.addAll(posts);

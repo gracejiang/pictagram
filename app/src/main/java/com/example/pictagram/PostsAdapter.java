@@ -1,6 +1,7 @@
 package com.example.pictagram;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.pictagram.models.Post;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+
+    public static final String TAG = "PostsAdapter";
 
     private Context context;
     private List<Post> posts;
@@ -50,6 +57,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvUsername;
         private ImageView ivPicture;
         private TextView tvDescription;
+        private TextView tvCreatedAt;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,6 +66,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername = itemView.findViewById(R.id.post_username_tv);
             ivPicture = itemView.findViewById(R.id.post_picture_iv);
             tvDescription = itemView.findViewById(R.id.post_description_tv);
+            tvCreatedAt = itemView.findViewById(R.id.post_created_at);
         }
 
         // bind data from post into view elements
@@ -65,6 +74,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername.setText(post.getUser().getUsername());
             tvDescription.setText(post.getDescription());
 
+            // post image
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context)
@@ -72,9 +82,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         .into(ivPicture);
             }
 
+            // avatar
             Glide.with(context)
                     .load("https://www.pngkey.com/png/detail/56-565977_vectors-download-icon-pikachu-moustache.png")
                     .into(ivProfilePicture);
+
+            // created at
+            tvCreatedAt.setText(dateToString(post.getCreatedAt()));
         }
 
         private String httpToHttps(String url) {
@@ -85,5 +99,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             String httpsUrl = "https" + url.substring(4);
             return httpsUrl;
         }
+    }
+
+    private String dateToString(Date rawDate) {
+        String relativeDate = "";
+
+        long dateMillis = rawDate.getTime();
+        relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+
+        return relativeDate;
     }
 }

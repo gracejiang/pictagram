@@ -43,5 +43,15 @@
         android:id="@+id/post_description_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="TextView" />
+
+    <TextView
+        android:id="@+id/post_created_at"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="30 min ago"
+        android:textColor="#959595"
+        android:textSize="12sp" />
 </LinearLayout>
