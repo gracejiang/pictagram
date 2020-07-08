@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.pictagram.LoginActivity;
 import com.example.pictagram.PostsAdapter;
@@ -29,6 +30,9 @@ public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment";
 
+    ParseUser currentUser;
+
+    private TextView tvUsername;
     private Button btnLogout;
 
     public ProfileFragment() {
@@ -46,8 +50,16 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        currentUser = ParseUser.getCurrentUser();
+
+        // view bindings
+        tvUsername = view.findViewById(R.id.profile_username);
         btnLogout = view.findViewById(R.id.profile_logout);
 
+        // update username
+        tvUsername.setText(currentUser.getUsername());
+
+        // logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

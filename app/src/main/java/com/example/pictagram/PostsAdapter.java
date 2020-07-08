@@ -46,6 +46,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        private ImageView ivProfilePicture;
         private TextView tvUsername;
         private ImageView ivPicture;
         private TextView tvDescription;
@@ -53,6 +54,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            ivProfilePicture = itemView.findViewById(R.id.post_profile_picture);
             tvUsername = itemView.findViewById(R.id.post_username_tv);
             ivPicture = itemView.findViewById(R.id.post_picture_iv);
             tvDescription = itemView.findViewById(R.id.post_description_tv);
@@ -69,6 +71,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         .load(httpToHttps(post.getImage().getUrl()))
                         .into(ivPicture);
             }
+
+            Glide.with(context)
+                    .load("https://www.pngkey.com/png/detail/56-565977_vectors-download-icon-pikachu-moustache.png")
+                    .into(ivProfilePicture);
         }
 
         private String httpToHttps(String url) {
