@@ -9,7 +9,7 @@
     android:paddingTop="10dp"
     android:showDividers="middle"
     android:divider="@drawable/empty_divider"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -23,7 +23,7 @@
         android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login_username"
+        android:id="@+id/register_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username"
@@ -37,10 +37,24 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login_password"
+        android:id="@+id/register_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/register_password_confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm your Password"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -52,24 +66,24 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/register_button"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginTop="12dp"
         android:background="@color/green"
         android:bottomLeftRadius="10dp"
         android:bottomRightRadius="10dp"
-        android:text="Login"
+        android:text="Register"
         android:textColor="#FFFFFF"
         android:topLeftRadius="10dp"
         android:topRightRadius="10dp" />
 
     <Button
-        android:id="@+id/login_register_instead"
+        android:id="@+id/register_login_instead"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:text="Don't have an account? Sign up instead."
+        android:text="Already have an account? Login instead."
         android:letterSpacing="0"
         android:textAllCaps="false" />
 

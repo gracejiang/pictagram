@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -18,9 +19,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
 
-    EditText etUsername;
-    EditText etPassword;
+    TextInputLayout etUsername;
+    TextInputLayout etPassword;
     Button btnLogin;
+    Button btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +36,22 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.login_username);
         etPassword = findViewById(R.id.login_password);
         btnLogin = findViewById(R.id.login_button);
+        btnRegister = findViewById(R.id.login_register_instead);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                String username = etUsername.getEditText().getText().toString();
+                String password = etPassword.getEditText().getText().toString();
 
                 loginUser(username, password);
+            }
+        });
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goRegisterActivity();
             }
         });
     }
@@ -52,7 +62,8 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
                     // report issue with login
-                    makeToast("Invalid username or password.");
+
+                    wrongPasswordNotification();
                     Log.e(TAG, "issue with login: ", e);
                     return;
                 }
@@ -64,13 +75,22 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void wrongPasswordNotification() {
+        SimpleDialog simpleDialog = new SimpleDialog("Login Error",
+                "Invalid username or password. Please try again.");
+        simpleDialog.show(getSupportFragmentManager(), "login error dialog");
+    }
+
     private void goMainActivity() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
     }
 
-    private void makeToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    private void goRegisterActivity() {
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivity(i);
+        finish();
     }
+
 }

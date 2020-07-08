@@ -5,6 +5,6 @@
     android:layout_height="40dp"
     android:layout_width="match_parent">
     <size
-        android:height="16dp"
+        android:height="6dp"
         android:width="0dp"/>
 </shape>
