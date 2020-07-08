@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pictagram.PostsAdapter;
+import com.example.pictagram.functions.PostsAdapter;
 import com.example.pictagram.R;
 import com.example.pictagram.models.Post;
 import com.parse.FindCallback;

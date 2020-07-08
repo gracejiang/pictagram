@@ -1,6 +1,7 @@
-package com.example.pictagram;
+package com.example.pictagram.functions;
 
 import android.content.Context;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,14 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.pictagram.R;
 import com.example.pictagram.models.Post;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
@@ -71,21 +70,32 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         // bind data from post into view elements
         public void bind(Post post) {
-            tvUsername.setText(post.getUser().getUsername());
-            tvDescription.setText(post.getDescription());
+            String username = post.getUser().getUsername();
+            tvUsername.setText(username);
+
+            String descriptionString = "<b>" + username + "</b> " + post.getDescription();
+            tvDescription.setText(Html.fromHtml(descriptionString));
 
             // post image
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context)
-                        .load(httpToHttps(post.getImage().getUrl()))
+                        .load(httpToHttps(image.getUrl()))
                         .into(ivPicture);
             }
 
-            // avatar
-            Glide.with(context)
-                    .load("https://www.pngkey.com/png/detail/56-565977_vectors-download-icon-pikachu-moustache.png")
-                    .into(ivProfilePicture);
+            ParseFile profilePic = (ParseFile) post.getUser().get("profilePic");
+
+            if (profilePic != null) {
+                Glide.with(context)
+                        .load(httpToHttps(profilePic.getUrl()))
+                        .circleCrop()
+                        .into(ivProfilePicture);
+            } else {
+                Log.e(TAG, "couldn't load profile pic");
+            }
+
+            // Log.i(TAG, String.valueOf(post.getUser().get("profilePic")));
 
             // created at
             tvCreatedAt.setText(dateToString(post.getCreatedAt()));

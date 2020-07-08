@@ -1,4 +1,4 @@
-package com.example.pictagram;
+package com.example.pictagram.functions;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,7 +14,7 @@ public class SimpleDialog extends AppCompatDialogFragment {
     String title = "";
     String message = "";
 
-    SimpleDialog(String title, String message) {
+    public SimpleDialog(String title, String message) {
         this.title = title;
         this.message = message;
     }

@@ -13,8 +13,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/posts_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp" />
+        android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>
