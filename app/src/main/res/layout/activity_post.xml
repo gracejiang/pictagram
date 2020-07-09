@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingVertical="8dp">
+    android:paddingVertical="8dp"
+    tools:context=".PostDetailsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="42dp">
 
         <RelativeLayout
-            android:id="@+id/item_profile_picture_container"
+            android:id="@+id/post_profile_picture_container"
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_marginStart="14dp"
@@ -20,7 +22,7 @@
             android:background="@drawable/circle_picture">
 
             <ImageView
-                android:id="@+id/item_profile_picture"
+                android:id="@+id/post_profile_picture"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="0.5dp"
@@ -29,7 +31,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/item_username_tv"
+            android:id="@+id/post_username_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -37,7 +39,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="267dp"
-            android:layout_toEndOf="@+id/item_profile_picture_container"
+            android:layout_toEndOf="@+id/post_profile_picture_container"
             android:gravity="center_vertical"
             android:text="username"
             android:textSize="14sp"
@@ -46,22 +48,22 @@
 
 
     <ImageView
-        android:id="@+id/item_picture_iv"
+        android:id="@+id/post_picture_iv"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/item_description_tv"
+        android:id="@+id/post_description_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         android:layout_marginTop="10dp"
-        android:text="TextView" />
+        android:text="Description" />
 
     <TextView
-        android:id="@+id/item_created_at"
+        android:id="@+id/post_created_at"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"

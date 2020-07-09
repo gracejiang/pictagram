@@ -28,10 +28,10 @@ public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
 
-    SwipeRefreshLayout swipeContainer;
+    private SwipeRefreshLayout swipeContainer;
 
-    RecyclerView rvPosts;
-    PostsAdapter postsAdapter;
+    private RecyclerView rvPosts;
+    private PostsAdapter postsAdapter;
 
     // data source
     private List<Post> allPosts = new ArrayList<>();
@@ -101,8 +101,5 @@ public class PostsFragment extends Fragment {
             }
         });
     }
-
-
-
 
 }

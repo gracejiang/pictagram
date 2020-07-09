@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_pictagram_full_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".PostDetailsActivity"></activity>
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

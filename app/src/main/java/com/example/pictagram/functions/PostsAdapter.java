@@ -1,6 +1,7 @@
 package com.example.pictagram.functions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -14,12 +15,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.pictagram.PostDetailsActivity;
 import com.example.pictagram.R;
 import com.example.pictagram.models.Post;
 import com.parse.ParseFile;
 
 import java.util.Date;
 import java.util.List;
+
+import org.parceler.Parcels;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
@@ -50,7 +54,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         return posts.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView ivProfilePicture;
         private TextView tvUsername;
@@ -61,11 +65,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ivProfilePicture = itemView.findViewById(R.id.post_profile_picture);
-            tvUsername = itemView.findViewById(R.id.post_username_tv);
-            ivPicture = itemView.findViewById(R.id.post_picture_iv);
-            tvDescription = itemView.findViewById(R.id.post_description_tv);
-            tvCreatedAt = itemView.findViewById(R.id.post_created_at);
+            itemView.setOnClickListener(this);
+
+            ivProfilePicture = itemView.findViewById(R.id.item_profile_picture);
+            tvUsername = itemView.findViewById(R.id.item_username_tv);
+            ivPicture = itemView.findViewById(R.id.item_picture_iv);
+            tvDescription = itemView.findViewById(R.id.item_description_tv);
+            tvCreatedAt = itemView.findViewById(R.id.item_created_at);
         }
 
         // bind data from post into view elements
@@ -109,6 +115,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             String httpsUrl = "https" + url.substring(4);
             return httpsUrl;
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                Post post = posts.get(position);
+                Intent intent = new Intent(context, PostDetailsActivity.class);
+                intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
+                context.startActivity(intent);
+            }
+        }
     }
 
     private String dateToString(Date rawDate) {
@@ -120,4 +137,5 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         return relativeDate;
     }
+
 }
