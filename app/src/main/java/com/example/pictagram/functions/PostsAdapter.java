@@ -90,8 +90,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         .into(ivPicture);
             }
 
-            ParseFile profilePic = (ParseFile) post.getUser().get("profilePic");
 
+            // profile pic
+            ParseFile profilePic = (ParseFile) post.getUser().get("profilePic");
             if (profilePic != null) {
                 Glide.with(context)
                         .load(httpToHttps(profilePic.getUrl()))
@@ -100,8 +101,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             } else {
                 Log.e(TAG, "couldn't load profile pic");
             }
-
-            // Log.i(TAG, String.valueOf(post.getUser().get("profilePic")));
 
             // created at
             tvCreatedAt.setText(dateToString(post.getCreatedAt()));

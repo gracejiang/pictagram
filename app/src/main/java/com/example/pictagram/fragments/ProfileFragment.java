@@ -12,13 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.pictagram.EditProfileActivity;
 import com.example.pictagram.LoginActivity;
+import com.example.pictagram.MainActivity;
 import com.example.pictagram.R;
 import com.example.pictagram.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -30,7 +35,10 @@ public class ProfileFragment extends Fragment {
 
     ParseUser currentUser;
 
+    private ImageView ivAvatar;
     private TextView tvUsername;
+    private TextView tvBio;
+    private Button btnEditProfile;
     private Button btnLogout;
 
     public ProfileFragment() {
@@ -51,19 +59,28 @@ public class ProfileFragment extends Fragment {
         currentUser = ParseUser.getCurrentUser();
 
         // view bindings
+        ivAvatar = view.findViewById(R.id.profile_pfp);
         tvUsername = view.findViewById(R.id.profile_username);
+        tvBio = view.findViewById(R.id.profile_bio);
+        btnEditProfile = view.findViewById(R.id.profile_edit_button);
         btnLogout = view.findViewById(R.id.profile_logout);
 
-        // update username
-        tvUsername.setText(currentUser.getUsername());
+        // update fields
 
-        // logout button
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-            }
-        });
+        // profile pic
+        ParseFile profilePic = (ParseFile) currentUser.get("profilePic");
+        if (profilePic != null) {
+            Glide.with(getContext())
+                    .load(httpToHttps(profilePic.getUrl()))
+                    .circleCrop()
+                    .into(ivAvatar);
+        } else {
+            Log.e(TAG, "couldn't load profile pic");
+        }
+
+        // username
+        tvUsername.setText(currentUser.getUsername());
+        tvBio.setText(currentUser.get("bio").toString());
 
 
 //        rvPosts = view.findViewById(R.id.posts_rv);
@@ -78,6 +95,24 @@ public class ProfileFragment extends Fragment {
 //        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         queryPosts();
+
+        // edit profile functionality
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // go to edit activity
+                Intent i = new Intent(getContext(), EditProfileActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // logout button
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logOut();
+            }
+        });
     }
 
     // log out functionality
@@ -115,5 +150,15 @@ public class ProfileFragment extends Fragment {
 //                postsAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    // converts http link to https
+    private String httpToHttps(String url) {
+        if (url.contains("https")) {
+            return url;
+        }
+
+        String httpsUrl = "https" + url.substring(4);
+        return httpsUrl;
     }
 }

@@ -78,8 +78,8 @@ public class RegisterActivity extends AppCompatActivity {
         user.setUsername(username);
         user.setPassword(password);
 
-        /*// Set custom properties
-        user.put("phone", "650-253-0000");*/
+        // set custom properties
+        user.put("bio", " ");
 
         // Invoke signUpInBackground
         user.signUpInBackground(new SignUpCallback() {

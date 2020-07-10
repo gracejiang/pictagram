@@ -48,7 +48,7 @@
     <ImageView
         android:id="@+id/item_picture_iv"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="420dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/avatars" />
 
