@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.parse.ParseUser;
@@ -54,8 +56,22 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    // return to current activity
     private void saveNewProfile() {
+        currentUser.put("bio", getBioText());
+        currentUser.saveInBackground();
+    }
 
+    private String getBioText() {
+        String currBio = etBio.getEditText().getText().toString();
+        if (currBio.equals("")) {
+            return " ";
+        }
+        return currBio;
+    }
+
+    private void makeToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG);
     }
 
 
