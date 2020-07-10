@@ -77,7 +77,7 @@ public class PostsFragment extends Fragment {
     }
 
     // retrieve posts from parse database
-    private void queryPosts() {
+    public void queryPosts() {
         allPosts.clear();
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 

@@ -70,9 +70,5 @@ public class EditProfileActivity extends AppCompatActivity {
         return currBio;
     }
 
-    private void makeToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG);
-    }
-
 
 }
