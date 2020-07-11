@@ -56,9 +56,9 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginTop="12dp"
-        android:background="@color/green"
         android:bottomLeftRadius="10dp"
         android:bottomRightRadius="10dp"
+        app:backgroundTint="@color/green"
         android:text="Login"
         android:textColor="#FFFFFF"
         android:topLeftRadius="10dp"
@@ -70,6 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:text="Don't have an account? Sign up instead."
+        android:textColor="@color/blue"
         android:letterSpacing="0"
         android:textAllCaps="false" />
 

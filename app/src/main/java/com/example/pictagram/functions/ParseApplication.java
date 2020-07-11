@@ -3,7 +3,6 @@ package com.example.pictagram.functions;
 import android.app.Application;
 
 import com.example.pictagram.models.Post;
-import com.example.pictagram.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -14,7 +13,6 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Post.class);
-        ParseObject.registerSubclass(User.class);
 
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured

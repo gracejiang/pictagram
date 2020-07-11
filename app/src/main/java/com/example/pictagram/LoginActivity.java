@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                     // report issue with login
 
                     wrongPasswordNotification();
-                    Log.e(TAG, "issue with login: ", e);
+                    Log.e(TAG, "issue with login: " + e);
                     return;
                 }
 
