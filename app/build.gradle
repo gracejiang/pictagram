@@ -51,6 +51,9 @@ dependencies {
     // swipe refresher
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
+    // recycler view
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
     // parcels for passing object through intents
     implementation 'org.parceler:parceler-api:1.1.12'
     annotationProcessor 'org.parceler:parceler:1.1.12'
