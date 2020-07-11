@@ -49,7 +49,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<!-- <img src='' title='Video Walkthrough' width='' alt='Video Walkthrough' /> -->
+<img src='demo.gif' title='Video Walkthrough' width='50%' alt='Video Walkthrough' /> -
 
 
 ## Credits
